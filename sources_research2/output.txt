@@ -1,0 +1,5 @@
+MathBot: The result is 17
+TranslateBot: 'hello' in Spanish is 'hola'
+TranslateBot: 'goodbye' in Spanish is 'adiós'
+TranslateBot: I don't know that word
+MathBot: Error processing task (division by zero)

@@ -1,5 +1,4 @@
 # 依赖包
-pip install autogen bs4 langchain openai anthropic
 pip uninstall pyautogen -y
 pip install pyautogen==0.2.10
 
