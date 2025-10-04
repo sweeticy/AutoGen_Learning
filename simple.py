@@ -31,12 +31,13 @@ user_proxy = UserProxyAgent(
         "use_docker": False  # 本地测试关闭 Docker
     },
     human_input_mode="ALWAYS",  # 不需要人工输入
-    max_consecutive_auto_reply=3
+    max_consecutive_auto_reply=3    # 自动回复次数
 )
 
 # 启动任务
+# 启动任务
 user_proxy.initiate_chat(
-    assistant,
+    assistant,# 这里指定对话的AssistantAgent对象
     message="Plot a chart of NVDA and TESLA stock price change YTD. "
             "Use yfinance to get stock data, and matplotlib to plot the chart. "
             "Save the chart as 'stock_chart.png' in the '/data/icy/code/Microsoft_AutoGen_Tutorial/sources_simple/pics' directory."

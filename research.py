@@ -1,6 +1,7 @@
 import os
-from autogen import config_list_from_json
 import autogen
+from autogen import config_list_from_json,GroupChatManager,GroupChat,AssistantAgent,UserProxyAgent
+
 
 import requests
 from bs4 import BeautifulSoup
@@ -17,7 +18,7 @@ from dotenv import load_dotenv
 # 获取各个 API Key
 load_dotenv()
 config_list = config_list_from_json(env_or_file="OAI_CONFIG_LIST.json")
-#具体可参见第三期视频
+
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 serper_api_key=os.getenv("SERPER_API_KEY")
 browserless_api_key=os.getenv("BROWSERLESS_API_KEY")
@@ -105,6 +106,7 @@ def summary(content):
 
     return output
 
+
 # 信息收集
 def research(query):
     llm_config_researcher = {
@@ -154,7 +156,7 @@ def research(query):
 
     user_proxy = autogen.UserProxyAgent(
         name="User_proxy",
-        code_execution_config={"last_n_messages": 2, "work_dir": "research"},
+        code_execution_config={"last_n_messages": 2, "work_dir": "sources_research", "use_docker": False},
         is_termination_msg=lambda x: x.get("content", "") and x.get(
             "content", "").rstrip().endswith("TERMINATE"),
         human_input_mode="TERMINATE",
@@ -226,7 +228,7 @@ def write_content(research_material, topic):
 # 出版
 llm_config_content_assistant = {
     "functions": [
-        {
+        {   # function 1 信息收集
             "name": "research",
             "description": "research about a given topic, return the research material including reference links",
             "parameters": {
@@ -240,7 +242,7 @@ llm_config_content_assistant = {
                 "required": ["query"],
             },
         },
-        {
+        {   # function 2 编辑
             "name": "write_content",
             "description": "Write content based on the given research material & topic",
             "parameters": {
@@ -259,7 +261,8 @@ llm_config_content_assistant = {
             },
         },
     ],
-    "config_list": config_list}
+    "config_list": config_list
+}
 
 writing_assistant = autogen.AssistantAgent(
     name="writing_assistant",
